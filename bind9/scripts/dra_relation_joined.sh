@@ -28,21 +28,21 @@ if [ -z "$dra_name" ]; then
 	dra_name="dra"
 fi
 
-if [ -z "$dra_mgmt" ]; then
+if [ -z "$dra_softfire_internal" ]; then
 	# Actually this case should not happen, only if you renamed the config values ;)
-	echo "$SERVICE : there is no mgmt network for dra !"
+	echo "$SERVICE : there is no softfire_internal network for dra !"
 	exit 1
 fi
 
 # Check if we want to use floatingIPs for the entries
 echo "$SERVICE : useFloatingIpsForEntries : $useFloatingIpsForEntries for dra"
 if [ ! $useFloatingIpsForEntries = "false" ]; then
-	if [ -z "$dra_mgmt_floatingIp" ]; then
-		echo "$SERVICE : there is no floatingIP for the mgmt network for dra !"
+	if [ -z "$dra_softfire_internal_floatingIp" ]; then
+		echo "$SERVICE : there is no floatingIP for the softfire_internal network for dra !"
 		#exit 1
 	else
 		# Else we just overwrite the environment variable
-		dra_mgmt=$dra_mgmt_floatingIp
+		dra_softfire_internal=$dra_softfire_internal_floatingIp
 	fi
 fi
 
@@ -54,10 +54,10 @@ else
 	touch $VARIABLE_BUCKET
 fi
 printf "dra_name=%s\n" \"$dra_name\" >> $VARIABLE_BUCKET
-printf "dra_mgmt=%s\n" \"$dra_mgmt\" >> $VARIABLE_BUCKET
+printf "dra_softfire_internal=%s\n" \"$dra_softfire_internal\" >> $VARIABLE_BUCKET
 
 # Fill up the template dns zone file with the necessary entries
 cat >>$SCRIPTS_PATH/$ZONEFILE <<EOL
-$dra_name.$realm. IN A $dra_mgmt
+$dra_name.$realm. IN A $dra_softfire_internal
 EOL
 

@@ -21,20 +21,20 @@ else
 fi
 
 # Check for the ipv4 address
-if [ -z "$mgmt" ]; then
+if [ -z "$softfire_internal" ]; then
 	# Actually this case should not happen, only if you renamed the config values ;)
-	echo "$SERVICE : there is no mgmt network !"
+	echo "$SERVICE : there is no softfire_internal network !"
 	exit 1
 fi
 
 # And if we have a floatingIp we should use the floatingIp to allow connection to the Tomcat server at port 8080
-if [ -z "$mgmt_floatingIp" ]; then
-	echo "$SERVICE : there is no floatingIP for the mgmt network!"
+if [ -z "$softfire_internal_floatingIp" ]; then
+	echo "$SERVICE : there is no floatingIP for the softfire_internal network!"
 else
 	# Else we just overwrite the environment variable
-	# mgmt=$mgmt_floatingIp
+	# softfire_internal=$softfire_internal_floatingIp
 	# Tomcat cannot bind to a floatingIp unless it is properly configured in the network config
-	# Thus we leave it the default mgmt address !!
+	# Thus we leave it the default softfire_internal address !!
 	echo "$SERVICE : There is a floatingIp, but it will not be used!"
 fi
 
@@ -68,7 +68,7 @@ echo "$SERVICE : Compiling sources"
 ant compile >> $LOGFILE 2>&1
 ant deploy >> $LOGFILE 2>&1
 
-sed -i -e "s/host=127.0.0.1/host=$mgmt/g" $HSS_PROPERTIES_FILE
+sed -i -e "s/host=127.0.0.1/host=$softfire_internal/g" $HSS_PROPERTIES_FILE
 
 # Import the basic database
 # But leave out the userdata.sql since we will adapt it with a different realm and scscf properties

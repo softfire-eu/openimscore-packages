@@ -34,21 +34,21 @@ if [ -z "$icscf_port" ]; then
 	icscf_port="6060"
 fi
 
-if [ -z "$icscf_mgmt" ]; then
+if [ -z "$icscf_softfire_internal" ]; then
 	# Actually this case should not happen, only if you renamed the config values ;)
-	echo "$SERVICE : there is no mgmt network for icscf !"
+	echo "$SERVICE : there is no softfire_internal network for icscf !"
 	exit 1
 fi
 
 # Check if we want to use floatingIPs for the entries
 echo "$SERVICE : useFloatingIpsForEntries : $useFloatingIpsForEntries for icscf"
 if [ ! $useFloatingIpsForEntries = "false" ]; then
-	if [ -z "$icscf_mgmt_floatingIp" ]; then
-		echo "$SERVICE : there is no floatingIP for the mgmt network for icscf !"
+	if [ -z "$icscf_softfire_internal_floatingIp" ]; then
+		echo "$SERVICE : there is no floatingIP for the softfire_internal network for icscf !"
 		#exit 1
 	else
 		# Else we just overwrite the environment variable
-		icscf_mgmt=$icscf_mgmt_floatingIp
+		icscf_softfire_internal=$icscf_softfire_internal_floatingIp
 	fi
 fi
 
@@ -60,20 +60,20 @@ else
 fi
 printf "icscf_name=%s\n" \"$icscf_name\" >> $VARIABLE_BUCKET
 printf "icscf_port=%s\n" \"$icscf_port\" >> $VARIABLE_BUCKET
-printf "icscf_mgmt=%s\n" \"$icscf_mgmt\" >> $VARIABLE_BUCKET
+printf "icscf_softfire_internal=%s\n" \"$icscf_softfire_internal\" >> $VARIABLE_BUCKET
 
 
 # Fill up the template dns zone file with the necessary entries
 cat >>$SCRIPTS_PATH/$ZONEFILE <<EOL
-$icscf_name.$realm.  IN A  $icscf_mgmt
-$icscf_name-cx.$realm.  IN A  $icscf_mgmt
+$icscf_name.$realm.  IN A  $icscf_softfire_internal
+$icscf_name-cx.$realm.  IN A  $icscf_softfire_internal
 _sip.$icscf_name.$realm.  IN SRV 1 0 $icscf_port $icscf_name.$realm.
 _sip._udp.$icscf_name.$realm.  IN SRV 1 0 $icscf_port $icscf_name.$realm.
 _sip._tcp.$icscf_name.$realm.  IN SRV 1 0 $icscf_port $icscf_name.$realm.
 _sip.$realm.  IN SRV 1 0 $icscf_port $realm.
 _sip._udp.$realm.  IN SRV 1 0 $icscf_port $realm.
 _sip._tcp.$realm.  IN SRV 1 0 $icscf_port $realm.
-$realm.  IN A  $icscf_mgmt
+$realm.  IN A  $icscf_softfire_internal
 $realm.  IN NAPTR 10 50 "s" "SIP+D2U" "" _sip._udp
 $realm.  IN NAPTR 20 50 "s" "SIP+D2U" "" _sip._tcp
 EOL

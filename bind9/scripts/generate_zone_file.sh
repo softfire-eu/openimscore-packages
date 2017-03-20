@@ -37,15 +37,15 @@ cp $SCRIPTS_PATH/$ZONEFILE $REALMFILE
 
 
 if [ ! $useFloatingIpsForEntries = "false" ]; then
-	if [ -z "$mgmt_floatingIp" ]; then
-		echo "$SERVICE : there is no floatingIP for the mgmt network for bind9 !"
+	if [ -z "$softfire_internal_floatingIp" ]; then
+		echo "$SERVICE : there is no floatingIP for the softfire_internal network for bind9 !"
 		exit 1
 	else
 		# Else we just overwrite the environment variable
-		dns_ip=$mgmt_floatingIp
+		dns_ip=$softfire_internal_floatingIp
 	fi
 else
-	dns_ip=$mgmt
+	dns_ip=$softfire_internal
 fi
 
 # Fill the Bind9 related information

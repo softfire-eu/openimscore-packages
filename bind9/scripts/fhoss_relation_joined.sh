@@ -28,21 +28,21 @@ if [ -z "$fhoss_name" ]; then
 	fhoss_name="hss"
 fi
 
-if [ -z "$fhoss_mgmt" ]; then
+if [ -z "$fhoss_softfire_internal" ]; then
 	# Actually this case should not happen, only if you renamed the config values ;)
-	echo "$SERVICE : there is no mgmt network for fhoss !"
+	echo "$SERVICE : there is no softfire_internal network for fhoss !"
 	exit 1
 fi
 
 # Check if we want to use floatingIPs for the entries
 echo "$SERVICE : useFloatingIpsForEntries : $useFloatingIpsForEntries for fhoss"
 if [ ! $useFloatingIpsForEntries = "false" ]; then
-	if [ -z "$fhoss_mgmt_floatingIp" ]; then
-		echo "$SERVICE : there is no floatingIP for the mgmt network for fhoss !"
+	if [ -z "$fhoss_softfire_internal_floatingIp" ]; then
+		echo "$SERVICE : there is no floatingIP for the softfire_internal network for fhoss !"
 		#exit 1
 	else
 		# Else we just overwrite the environment variable
-		fhoss_mgmt=$fhoss_mgmt_floatingIp
+		fhoss_softfire_internal=$fhoss_softfire_internal_floatingIp
 	fi
 fi
 
@@ -54,10 +54,10 @@ else
 	touch $VARIABLE_BUCKET
 fi
 printf "fhoss_name=%s\n" \"$fhoss_name\" >> $VARIABLE_BUCKET
-printf "fhoss_mgmt=%s\n" \"$fhoss_mgmt\" >> $VARIABLE_BUCKET
+printf "fhoss_softfire_internal=%s\n" \"$fhoss_softfire_internal\" >> $VARIABLE_BUCKET
 
 # Fill up the template dns zone file with the necessary entries
 cat >>$SCRIPTS_PATH/$ZONEFILE <<EOL
-$fhoss_name.$realm. IN A $fhoss_mgmt
+$fhoss_name.$realm. IN A $fhoss_softfire_internal
 EOL
 

@@ -33,9 +33,9 @@ if [ -z "$name" ]; then
 	name="pcscf"
 fi
 
-if [ -z "$mgmt" ]; then
+if [ -z "$softfire_internal" ]; then
 	# Actually this case should not happen, only if you renamed the config values ;)
-	echo "$SERVICE : there is not mgmt network!"
+	echo "$SERVICE : there is not softfire_internal network!"
 	exit 1
 fi
 
@@ -66,7 +66,7 @@ cp $CFG_INPUT_FILE $CFG_OUTPUT_FILE
 
 # Fill the template
 
-python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $CFG_OUTPUT_FILE VAR_DIAMETER_LISTEN%$mgmt
+python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $CFG_OUTPUT_FILE VAR_DIAMETER_LISTEN%$softfire_internal
 python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $CFG_OUTPUT_FILE VAR_PCSCF_PORT%$port
 python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $CFG_OUTPUT_FILE VAR_DNS_ENTRY%$bind9_entry
 python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $CFG_OUTPUT_FILE VAR_DNS_REALM%$realm

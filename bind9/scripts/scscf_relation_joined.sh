@@ -34,21 +34,21 @@ if [ -z "$scscf_port" ]; then
 	scscf_port="5060"
 fi
 
-if [ -z "$scscf_mgmt" ]; then
+if [ -z "$scscf_softfire_internal" ]; then
 	# Actually this case should not happen, only if you renamed the config values ;)
-	echo "$SERVICE : there is no mgmt network for scscf !"
+	echo "$SERVICE : there is no softfire_internal network for scscf !"
 	exit 1
 fi
 
 # Check if we want to use floatingIPs for the entries
 echo "$SERVICE : useFloatingIpsForEntries : $useFloatingIpsForEntries for scscf"
 if [ ! $useFloatingIpsForEntries = "false" ]; then
-	if [ -z "$scscf_mgmt_floatingIp" ]; then
-		echo "$SERVICE : there is no floatingIP for the mgmt network for scscf !"
+	if [ -z "$scscf_softfire_internal_floatingIp" ]; then
+		echo "$SERVICE : there is no floatingIP for the softfire_internal network for scscf !"
 		#exit 1
 	else
 		# Else we just overwrite the environment variable
-		scscf_mgmt=$scscf_mgmt_floatingIp
+		scscf_softfire_internal=$scscf_softfire_internal_floatingIp
 	fi
 fi
 
@@ -60,13 +60,13 @@ else
 fi
 printf "scscf_name=%s\n" \"$scscf_name\" >> $VARIABLE_BUCKET
 printf "scscf_port=%s\n" \"$scscf_port\" >> $VARIABLE_BUCKET
-printf "scscf_mgmt=%s\n" \"$scscf_mgmt\" >> $VARIABLE_BUCKET
+printf "scscf_softfire_internal=%s\n" \"$scscf_softfire_internal\" >> $VARIABLE_BUCKET
 
 # Fill up the template dns zone file with the necessary entries
 cat >>$SCRIPTS_PATH/$ZONEFILE <<EOL
-$scscf_name.$realm.  IN A  $scscf_mgmt
-$scscf_name-cx.$realm.  IN A  $scscf_mgmt
-$scscf_name-cxrf.$realm.  IN A  $scscf_mgmt
+$scscf_name.$realm.  IN A  $scscf_softfire_internal
+$scscf_name-cx.$realm.  IN A  $scscf_softfire_internal
+$scscf_name-cxrf.$realm.  IN A  $scscf_softfire_internal
 _sip.$scscf_name.$realm.  IN SRV 1 0 $scscf_port $scscf_name.$realm.
 _sip._udp.$scscf_name.$realm.  IN SRV 1 0 $scscf_port $scscf_name.$realm.
 _sip._tcp.$scscf_name.$realm.  IN SRV 1 0 $scscf_port $scscf_name.$realm.

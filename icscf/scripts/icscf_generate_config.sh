@@ -39,9 +39,9 @@ if [ -z "$name" ]; then
 	name="icscf"
 fi
 
-if [ -z "$mgmt" ]; then
+if [ -z "$softfire_internal" ]; then
 	# Actually this case should not happen, only if you renamed the config values ;)
-	echo "$SERVICE : there is not mgmt network!"
+	echo "$SERVICE : there is not softfire_internal network!"
 	exit 1
 fi
 
@@ -105,7 +105,7 @@ cp $SQL_INPUT_FILE $SQL_OUTPUT_FILE
 
 # Fill the templates
 
-python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $CFG_OUTPUT_FILE VAR_DIAMETER_LISTEN%$mgmt
+python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $CFG_OUTPUT_FILE VAR_DIAMETER_LISTEN%$softfire_internal
 python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $CFG_OUTPUT_FILE VAR_ICSCF_PORT%$port
 python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $CFG_OUTPUT_FILE VAR_DNS_ENTRY%$bind9_entry
 python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $CFG_OUTPUT_FILE VAR_DNS_REALM%$realm
@@ -118,7 +118,7 @@ python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $SQL_OUTPUT_FILE VAR_SCSCF_PORT%$scscf_po
 
 python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $XML_OUTPUT_FILE VAR_DNS_REALM%$realm
 python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $XML_OUTPUT_FILE VAR_DNS_ENTRY%$bind9_entry
-python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $XML_OUTPUT_FILE VAR_DIAMETER_LISTEN%$mgmt
+python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $XML_OUTPUT_FILE VAR_DIAMETER_LISTEN%$softfire_internal
 python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $XML_OUTPUT_FILE VAR_DIAMETER_PORT%$diameter_p
 python $SCRIPTS_PATH/$SUBSITUTE_SCRIPT $XML_OUTPUT_FILE VAR_DEFAULT_ROUTE%$fhoss_entry
 
@@ -127,7 +127,7 @@ prepare_mysql()
 	service mysql restart
 	mysql -u root -e "create database if not exists icscf;"
 	mysql -u root -e "grant delete,insert,select,update on icscf.* to icscf@localhost IDENTIFIED BY 'heslo';"
-	mysql -u root -e "grant delete,insert,select,update on icscf.* to icscf@$mgmt IDENTIFIED BY 'heslo';"
+	mysql -u root -e "grant delete,insert,select,update on icscf.* to icscf@$softfire_internal IDENTIFIED BY 'heslo';"
 	mysql -u root -h localhost < $INSTALLATION_PATH/etc/sql/icscf.sql
 }
 

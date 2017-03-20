@@ -27,36 +27,36 @@ if [ -z "$bind9_realm" ]; then
 	bind9_realm="openims.test"
 fi
 
-if [ -z "$mgmt" ]; then
+if [ -z "$softfire_internal" ]; then
 	# Actually this case should not happen, only if you renamed the config values ;)
-	echo "$SERVICE : there is not mgmt network!"
+	echo "$SERVICE : there is not softfire_internal network!"
 	exit 1
 fi
 
-if [ -z "$bind9_mgmt" ]; then
+if [ -z "$bind9_softfire_internal" ]; then
 	# Actually this case should not happen, only if you renamed the config values ;)
-	echo "$SERVICE : there is not mgmt network for bind9!"
+	echo "$SERVICE : there is not softfire_internal network for bind9!"
 	exit 1
 fi
 
 if [ ! -z "$bind9_useFloatingIpsForEntries" ]; then
 	echo "$SERVICE : bind9_useFloatingIpsForEntries : $bind9_useFloatingIpsForEntries"
 	if [ ! $bind9_useFloatingIpsForEntries = "false" ]; then
-		if [ -z "$bind9_mgmt_floatingIp" ]; then
-			echo "$SERVICE : there is no floatingIP for the mgmt network for bind9 !"
+		if [ -z "$bind9_softfire_internal_floatingIp" ]; then
+			echo "$SERVICE : there is no floatingIP for the softfire_internal network for bind9 !"
 			exit 1
 		else
 			# Else we just overwrite the environment variable
-			bind9_mgmt=$bind9_mgmt_floatingIp
+			bind9_softfire_internal=$bind9_softfire_internal_floatingIp
 		fi
 	fi
 fi
 
-# Get the own ipv4 address ( We assume it is called "mgmt" here! )
-IPV4_ADDRESS=$mgmt
+# Get the own ipv4 address ( We assume it is called "softfire_internal" here! )
+IPV4_ADDRESS=$softfire_internal
 
-# Get the bind9 ipv4 address ( We assume it is called "mgmt" here! )
-BIND9_IP=$bind9_mgmt
+# Get the bind9 ipv4 address ( We assume it is called "softfire_internal" here! )
+BIND9_IP=$bind9_softfire_internal
 
 
 # Save variables related to bind9 into a file to access it in a later phase

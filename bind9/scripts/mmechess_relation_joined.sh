@@ -34,21 +34,21 @@ if [ -z "$mmechess_hostname" ]; then
 	mmechess_hostname="mmechess"
 fi
 
-if [ -z "$mmechess_mgmt" ]; then
+if [ -z "$mmechess_softfire_internal" ]; then
 	# Actually this case should not happen, only if you renamed the config values ;)
-	echo "$SERVICE : there is no mgmt network for mmechess !"
+	echo "$SERVICE : there is no softfire_internal network for mmechess !"
 	exit 1
 fi
 
 # Check if we want to use floatingIPs for the entries
 echo "$SERVICE : useFloatingIpsForEntries : $useFloatingIpsForEntries for mmechess"
 if [ ! $useFloatingIpsForEntries = "false" ]; then
-	if [ -z "$mmechess_mgmt_floatingIp" ]; then
-		echo "$SERVICE : there is no floatingIP for the mgmt network for mmechess !"
+	if [ -z "$mmechess_softfire_internal_floatingIp" ]; then
+		echo "$SERVICE : there is no floatingIP for the softfire_internal network for mmechess !"
 		#exit 1
 	else
 		# Else we just overwrite the environment variable
-		mmechess_mgmt=$mmechess_mgmt_floatingIp
+		mmechess_softfire_internal=$mmechess_softfire_internal_floatingIp
 	fi
 fi
 
@@ -60,11 +60,11 @@ else
 	touch $VARIABLE_BUCKET
 fi
 printf "mmechess_var_name=%s\n" \"$mmechess_var_name\" >> $VARIABLE_BUCKET
-printf "mmechess_mgmt=%s\n" \"$mmechess_mgmt\" >> $VARIABLE_BUCKET
+printf "mmechess_softfire_internal=%s\n" \"$mmechess_softfire_internal\" >> $VARIABLE_BUCKET
 
 # Fill up the template dns zone file with the necessary entries
 cat >>$SCRIPTS_PATH/$ZONEFILE <<EOL
-$mmechess_var_name.$realm. IN A $mmechess_mgmt
-$mmechess_hostname.$realm. IN A $mmechess_mgmt
+$mmechess_var_name.$realm. IN A $mmechess_softfire_internal
+$mmechess_hostname.$realm. IN A $mmechess_softfire_internal
 EOL
 
