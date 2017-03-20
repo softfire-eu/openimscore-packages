@@ -44,7 +44,7 @@
             {
                "connection_point":[
                   {
-                    "floatingIp":"10.5.21.60",
+                    "floatingIp":"random",
                     "virtual_link_reference":"softfire-internal"
                   }
                ]
