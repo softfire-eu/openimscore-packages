@@ -1,73 +1,84 @@
-      {  
-         "name":"icscf",
-         "vendor":"fokus",
-         "version":"3.2.0",
-         "lifecycle_event":[  
-            {  
-               "event":"CONFIGURE",
-               "lifecycle_events":[
-			"bind9_relation_joined.sh",
-			"fhoss_relation_joined.sh",
-			"scscf_relation_joined.sh"
-               ]
-            },
-            {  
-               "event":"INSTANTIATE",
-               "lifecycle_events":[ 
-			"icscf_install.sh"
-               ]
-            },
-            {  
-               "event":"START",
-               "lifecycle_events":[
-			"icscf_generate_config.sh",
-			"icscf_start.sh" 
-               ]
-            }
-         ],
-         "configurations":{  
-            "name":"client-configuration",
-            "configurationParameters":[
-	       {  
-                  "confKey":"port",
-                  "value":"5060"
-               },
-	       {  
-                  "confKey":"name",
-                  "value":"icscf"
-               },
-	       {  
-                  "confKey":"diameter_p",
-                  "value":"3869"
-               }
-            ]
+{
+   "name":"icscf",
+   "vendor":"fokus",
+   "version":"0.1",
+   "lifecycle_event":[
+      {
+         "event":"CONFIGURE",
+         "lifecycle_events":[
+"bind9_relation_joined.sh",
+"fhoss_relation_joined.sh",
+"scscf_relation_joined.sh"
+         ]
+      },
+      {
+         "event":"INSTANTIATE",
+         "lifecycle_events":[
+"icscf_install.sh"
+         ]
+      },
+      {
+         "event":"START",
+         "lifecycle_events":[
+"icscf_generate_config.sh",
+"icscf_start.sh"
+         ]
+      }
+   ],
+   "configurations":{
+      "name":"icscf-configuration",
+      "configurationParameters":[
+   {
+            "confKey":"port",
+            "value":"5060"
          },
-         "vdu":[  
-            {  
-               "vm_image":[],
-               "scale_in_out":1,
-               "vnfc":[  
-                  {  
-                     "connection_point":[  
-                        {  
-			   "floatingIp":"random",
-                           "virtual_link_reference":"mgmt"
-                        } 
-                     ]
+   {
+            "confKey":"name",
+            "value":"icscf"
+         },
+   {
+            "confKey":"diameter_p",
+            "value":"4869"
+         }
+      ]
+   },
+   "vdu":[
+      {
+         "vm_image":[],
+         "scale_in_out":1,
+         "vnfc":[
+            {
+               "connection_point":[
+                  {
+                     "floatingIp":"10.5.21.63",
+                     "virtual_link_reference":"softfire-internal"
                   }
                ]
             }
-         ],
-         "virtual_link":[  
-            {  
-               "name":"mgmt"
-            }
-         ],
-         "deployment_flavour":[  
-            {  
-               "flavour_key":"m1.small"
-            }
-         ],
-         "type":"icscf",
-         "endpoint":"generic"
+         ]
       }
+   ],
+   "virtual_link":[
+      {
+         "name":"softfire-internal"
+      }
+   ],
+   "deployment_flavour":[
+      {
+         "flavour_key":"m1.small"
+      }
+   ],
+   "endpoint":"generic",
+   "type":"icscf",
+   "requires":{
+         "bind9":{
+               "parameters":[ "useFloatingIpsForEntries", "realm", "softfire-internal", "softfire-internal_floatingIp" ]
+         },
+         "fhoss":{
+               "parameters":[ "name", "port", "softfire-internal", "softfire-internal_floatingIp" ]
+         },
+         "scscf":{
+                "parameters":[ "name", "port", "softfire-internal", "softfire-internal_floatingIp" ]
+         }
+   }
+}
