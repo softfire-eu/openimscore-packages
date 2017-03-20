@@ -1,13 +1,12 @@
 name: scscf
 provider: fokus
-nfvo_version: 3.2.0
-description: "A Serving-CSCF (S-CSCF) is the central node of the signalling plane. It is a SIP server, but performs session control too. It is always located in the home network. It uses Diameter Cx and Dx interfaces to the HSS to download user profiles and upload user-to-S-CSCF associations (the user profile is only cached locally for processing reasons only and is not changed). All necessary subscriber profile information is loaded from the HSS."
 shared: true
+description: "A Serving-CSCF (S-CSCF) is the central node of the signalling plane. It is a SIP server, but performs session control too. It is always located in the home network. It uses Diameter Cx and Dx interfaces to the HSS to download user profiles and upload user-to-S-CSCF associations (the user profile is only cached locally for processing reasons only and is not changed). All necessary subscriber profile information is loaded from the HSS."
 image:
-    upload: check
+    upload: false
     names:
         - openims
-    link: http://marketplace.openbaton.org:8082/api/v1/images/52e2ccc0-1dce-4663-894d-28aab49323aa/img
+    link: http://marketplace.openbaton.org:8082/api/v1/images/57c82eb6e4b00b8983c25139/download
 image-config:
     name: openims
     diskFormat: qcow2
