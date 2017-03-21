@@ -1,6 +1,13 @@
 #!/bin/bash
 
-dest="../tars"
+dest="tars"
+
+if [ ! -d $dest ]; then
+	echo "creating $dest folder"
+	mkdir -p $dest
+fi
+
+dest="../$dest"
 
 if [ ! -d "$dest" ]; then
 	 mkdir $dest 
