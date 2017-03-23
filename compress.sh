@@ -9,10 +9,6 @@ fi
 
 dest="../$dest"
 
-if [ ! -d "$dest" ]; then
-	 mkdir $dest 
-fi
-
 pushd bind9
 tar -cvf $dest/bind9.tar Metadata.yaml vnfd.json scripts
 popd
